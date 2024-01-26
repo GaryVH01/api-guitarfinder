@@ -1,4 +1,5 @@
 const multer = require("multer");
+const upload = multer();
 
 // Gestion des fichiers entrants lors de la requête HTTP.
 
@@ -24,4 +25,4 @@ const storage = multer.diskStorage({
   },
 });
 
-module.exports = multer({ storage: storage }).single("image");
+module.exports = multer({ storage: storage });

@@ -31,19 +31,22 @@ app.use((req, res, next) => {
 });
 
 app.get("/api", (req, res) => {
-  res.json({ message: "Hello from server!" });
+  res.json({ message: "Well done... Everything serve!" });
 });
 
-// fonction pour créer une guitare
-app.post("/api/guitars", multer, (req, res, next) => {
+// fonction pour créer une guitare avec plusieurs images
+app.post("/api/guitars", multer.array("image", 9999), (req, res, next) => {
   guitarsModel
     .create(req.body)
     .then(() =>
-      res.status(201).json({ message: "Guitar successfully created !" })
+      res
+        .status(201)
+        .json({ result: true, message: "Guitar successfully created !" })
     )
     .catch((err) => res.json(err));
 });
 
+//fonction pour récupérer toutes les guitares
 app.get("/api/guitars", (req, res, next) => {
   guitarsModel
     .find() // utilisation de la méthode find pour récupérer la liste complète des guitares
