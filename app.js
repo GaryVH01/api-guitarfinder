@@ -5,8 +5,11 @@ const connectDB = require("./db");
 require("dotenv").config(); // Importation de la variable d'environnement
 const path = require("path");
 
-const guitarsModel = require("./models/guitar");
-const multer = require("./middlewares/multer-config");
+// const guitarsModel = require("./models/guitar");
+// const multer = require("./middlewares/multer-config");
+
+// Importation du rooting
+const guitarRoutes = require("./routes/guitar"); // Importation des routes product
 
 const fs = require("fs"); // permet de modifier le système de fichiers (en autre pour gèrer la suppression des images en local)
 
@@ -30,28 +33,11 @@ app.use((req, res, next) => {
   next();
 });
 
-app.get("/api", (req, res) => {
+app.get("/", (req, res) => {
   res.json({ message: "Well done... Everything serve!" });
 });
 
-// fonction pour créer une guitare avec plusieurs images
-app.post("/api/guitars", multer.array("image", 9999), (req, res, next) => {
-  guitarsModel
-    .create(req.body)
-    .then(() =>
-      res
-        .status(201)
-        .json({ result: true, message: "Guitar successfully created !" })
-    )
-    .catch((err) => res.json(err));
-});
-
-//fonction pour récupérer toutes les guitares
-app.get("/api/guitars", (req, res, next) => {
-  guitarsModel
-    .find() // utilisation de la méthode find pour récupérer la liste complète des guitares
-    .then((guitars) => res.status(200).json(guitars)) // on renvoie le tableau de toutes les guitares
-    .catch((error) => res.status(400).json({ error: error })); // sinon on renvoie une erreur 400
-});
+app.use("/guitars", guitarRoutes); // Enregistrement des routes guitars
+app.use("/images", express.static(path.join(__dirname, "images"))); // Enregistrement des images
 
 module.exports = app; // Export de l'application express
