@@ -3,7 +3,12 @@ const fs = require("fs"); // permet de manipuler le système de fichiers pou la 
 
 // Fonction pour créer une guitare
 exports.createGuitar = (req, res) => {
-  Guitar.create(req.body)
+  const guitar = new Guitar({
+    id: Date.now(),
+    ...req.body,
+    // image: `${req.protocol}://${req.get("host")}/images/${req.file.filename}`,
+  });
+  Guitar.create(guitar)
     .then(() => res.status(201).json({ message: "Guitare Créée !" }))
     .catch((error) => res.status(400).json({ error }));
 };
